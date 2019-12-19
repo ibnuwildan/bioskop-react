@@ -3,7 +3,10 @@
 const INITIAL_STATE = {
     username: '',
     email: '',
-    role: ''
+    role: '',
+    id:'',
+    password:'',
+    cart:[]
 }
 
 export const authReducer = (state = INITIAL_STATE, action) => {
@@ -13,7 +16,9 @@ export const authReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 username: action.payload.username,
                 email: action.payload.email,
-                role: action.payload.role
+                role: action.payload.role,
+                password: action.payload.password,
+                id: action.payload.id
             }
         case 'LOGOUT':
             return INITIAL_STATE

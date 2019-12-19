@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link,Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Logout } from '../redux/action';
 import { Button } from 'reactstrap';
@@ -29,7 +29,7 @@ class NavbarHead extends Component {
         console.log(this.props.username)
         if (localStorage.getItem(null)) {
             return (
-                <Redirect to='/Home'>
+                <Redirect to='/'>
 
                 </Redirect>
             )
@@ -37,7 +37,7 @@ class NavbarHead extends Component {
         return (
             <div>
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <Link to='/Home' className="navbar-brand">
+                    <Link to='/' className="navbar-brand">
                         <img src="http://2.bp.blogspot.com/-66rTPz3I0jc/VCzFkh0GyKI/AAAAAAAAAvU/7E9UyGdCeJc/s1600/Layar%2BTancap%2Blogo.png" width="30" height="30" alt=""></img>
                     </Link>
                     <div class="collapse navbar-collapse" id="navbarNav">
@@ -81,35 +81,64 @@ class NavbarHead extends Component {
                                 {this.props.username
                                     ?
                                     <div>
-                                        {this.props.username === 'admin'
+                                        {this.props.role === 'admin'
                                             ?
-                                            <DropdownItem>
-                                                <Link to='/AdminPage'>
-                                                    Admin Page
-                                        </Link>
-                                            </DropdownItem>
-                                            :
-                                            <DropdownItem>
-                                                <Link to='/USerPage'>
-                                                    User Page
+                                            <div>
+                                                <DropdownItem>
+                                                    <Link to='/AdminPage'>
+                                                        Admin Page
                                                 </Link>
-                                            </DropdownItem>
+                                                </DropdownItem>
+                                                <DropdownItem>
+                                                    <Link to='/ChekTransaksi'>
+                                                        Chek Transaction
+                                             </Link>
+                                                </DropdownItem>
+                                                <DropdownItem>
+                                                    <Link to='/EditProfil'>
+                                                        Edit Profil
+                                                </Link>
+                                                </DropdownItem>
+                                            </div>
+                                            :
+                                            <div>
+                                                <DropdownItem>
+                                                    <Link to='/EditProfil'>
+                                                        Edit Profil
+                                                </Link>
+                                                </DropdownItem>
+                                                <DropdownItem>
+                                                    <Link to='/USerPage'>
+                                                        User Page
+                                                </Link>
+                                                </DropdownItem>
+                                                <DropdownItem>
+                                                    <Link to='/History'>
+                                                        History
+                                                </Link>
+
+                                                </DropdownItem>
+                                            </div>
                                         }
+
                                         <DropdownItem onClick={this.BtnLogout}>
-                                            Logout
-                                    </DropdownItem>
+                                            <Link to='/'>
+                                                Logout
+                                            </Link>
+                                        </DropdownItem>
                                     </div>
                                     :
+
                                     <div>
                                         <DropdownItem>
                                             <Link to='/LoginPage'>
                                                 Login
-                                    </Link>
+                                            </Link>
                                         </DropdownItem>
                                         <DropdownItem>
                                             <Link to='/RegisterPage'>
                                                 Registration
-                                    </Link>
+                                                </Link>
                                         </DropdownItem>
                                     </div>
                                 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
-import { Button, Form, FormGroup, Label, Input} from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input,Alert} from 'reactstrap';
 import { connect } from 'react-redux';
 import { Login } from '../redux/action';
 import { Link, Redirect } from 'react-router-dom';
@@ -87,7 +87,19 @@ class Register extends Component {
     //     </ToastBody>
     //     </Toast>)
     // }
-
+hendleChange = (e) => {
+                    let pass = e.target.value
+                    let abjad = /[a-z]/
+                    let num = /[0-9]/
+                    let spec = /[$#@!%^&*()]/
+                    this.setState({
+                        abjad: abjad.test(pass),
+                        num: num.test(pass),
+                        spec: spec.test(pass),
+                        char: pass.length > 7,
+                        border: (abjad.test(pass) && num.test(pass) && spec.test(pass) && (pass.length > 7))
+                    })
+                }
     regisSubmit = () => {
         this.regisUser()
         this.toggle()
@@ -112,11 +124,27 @@ class Register extends Component {
         this.setState({ show: true })
     }
 
+    passwordAlert = () => {
+        if (this.state.char) {
+            if (this.state.abjad && this.state.num && this.state.spec) {
+                return <Alert color="success"> Strongest</Alert>
+            }
+            if ((this.state.abjad && this.state.num) || (this.state.abjad && this.state.spec) || (this.state.num && this.state.spec)) {
+                return <Alert color="success">Strong</Alert>
+            }
+            else {
+                return <Alert color="warning">Weak</Alert>
+            }
+        }
+        else {
+            return <Alert color="danger" value="100">Min. 8 Password </Alert>
+        }
+    }
     
     render() {
         if (this.props.username) {
             return (
-                <Redirect to='/Home'>
+                <Redirect to='/'>
 
                 </Redirect>
             )

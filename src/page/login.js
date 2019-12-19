@@ -32,7 +32,7 @@ class LoginPage extends Component {
         console.log(this.props.username)
         if (this.props.username) {
             return (
-                <Redirect to='/Home'>
+                <Redirect to='/'>
 
                 </Redirect>
             )

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'reactstrap'
 // import { connect } from 'react-redux'
 import Axios from 'axios'
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 class MoviesDetail extends Component {
@@ -11,7 +11,10 @@ class MoviesDetail extends Component {
             {
 
             }
-        ]
+        ],
+        redirectLogin: false,
+        redirectPurchase: false
+
     }
     componentDidMount() {
         let id = this.props.location.search.split('=')[1]
@@ -44,10 +47,19 @@ class MoviesDetail extends Component {
         }
     }
 
-
     render() {
-        let { data } = this.state;
-        console.log(data)
+        // let { data } = this.state;
+        // console.log(data)
+        let { data, redirectLogin, redirectPurchase } = this.state;
+        if (redirectLogin) {
+            return (
+                <Redirect to='/LoginPage' />
+            )
+        } else if (redirectPurchase) {
+            return (
+                <Redirect to={{ pathname: '/BookingSeat', state: this.state.data }} />
+            )
+        }
         return (
             <div className="container-fluid">
                 {data.map((val, index) =>
@@ -57,23 +69,18 @@ class MoviesDetail extends Component {
                         </div>
                         <div className="col" style={{ margin: "auto" }}>
 
-                            <h5>{val.name} </h5>
-                            <h5>{val.genre}</h5>
-                            <h5>{val.director}</h5>
-                            <h5>{val.synopsis}</h5>
-                            {this.props.username
-                                ? this.props.role==='admin'
-                                    ?
-                                    <Button color="primary" disabled>primary</Button>
-
-                                    :
-                                        <Link to='/BookingSeet'>
-                                            <Button color="primaryn ">primary</Button>
-                                        </Link>
-                                :
-                                <div>
-                                    <Button color="primary" disabled>primary</Button>
-                                </div>
+                            <h6>{val.name}</h6>
+                            <p>{val.genre}</p>
+                            <p>{val.director}</p>
+                            <p>{val.synopsis}</p>
+                            {this.props.username?
+                                <Link to={`/BookingSeat?id=${data[0].id}`}>
+                                    <Button className="float-right" disable size="lg" style={{ background: "#0d47a1", borderBottomLeftRadius: 15, borderTopRightRadius: 15, marginBottom: 0 }}>Buy Ticket</Button>
+                                </Link>
+                            :
+                            <Link to="/Login">
+                                <Button className="float-right" size="lg" style={{ background: "#0d47a1", borderBottomLeftRadius: 15, borderTopRightRadius: 15, marginBottom: 0 }}>Get Your Ticket</Button>
+                                </Link>
                             }
 
                         </div>
@@ -85,10 +92,10 @@ class MoviesDetail extends Component {
         // }
     }
 }
-const mapStatetoProps = ({auth}) => { // fungsi yg menghubungkan file login dgn authaction dan authreducer. 
+const mapStatetoProps = ({ auth }) => { // fungsi yg menghubungkan file login dgn authaction dan authreducer. 
     return {
-                    username: auth.username,
-                    role: auth.role
-}
+        username: auth.username,
+        role: auth.role
+    }
 }
 export default connect(mapStatetoProps)(MoviesDetail) 
