@@ -9,7 +9,7 @@ import { addToCart } from '../redux/action';
 class BookingSeet extends Component {
     state = {
         data: [],
-        booked: [[0,0], [0,1]],
+        booked: [[0, 0], [0, 1]],
         chosen: [],
         price: 0,
         count: 0
@@ -21,6 +21,7 @@ class BookingSeet extends Component {
         var id = this.props.location.search.split('=')[1];
         Axios.get(`http://localhost:2000/movies/${id}`)
             .then((res) => {
+                this.setState({ booked: res.data.booked })
                 this.setState({ data: res.data })
                 // console.log(this.state.data)
             })
@@ -121,23 +122,45 @@ class BookingSeet extends Component {
     }
 
     addToCart = () => {
-        Axios.post(`http://localhost:2000/userTransaction`,{
-            username: this.props.username,
-            moviesImage:this.state.data.image,
-            moviesTitle:this.state.data.name,
-            ticket_amount:this.state.count,
-            price:this.state.price,
-            seat:this.state.chosen,
-            IDfilm:this.state.data.id,
-            status:'Unpaid'
-        })
-        this.setState({
-            chosen:[],
-            price:0,
-            count:0
-        })
+        let { data } = this.state;
+        let a = new Date()
+        var days = ['sunday', 'monday', 'tuesday', 'wednesday', 'friday', 'saturday'];
+
+        Axios.get(`http://localhost:2000/userTransaction?username=${localStorage.getItem('username')}&moviesTitle=${data.name}`)
+            .then((res) => {
+                console.log(this.state.chosen.map((val) => {
+                    console.log(val)
+                }))
+                if (res.data.length > 0 && res.data[0].moviesTitle === data.name) {
+                    Axios.patch(`http://localhost:2000/userTransaction/${res.data[0].id}`, {
+                        ticket_amount: (parseInt(res.data[0].ticket_amount) + parseInt(this.state.count)),
+                        price: (res.data[0].price + this.state.price),
+                        seat: res.data[0].seat.concat(this.state.chosen)
+                    })
+                }
+                else {
+                    Axios.post(`http://localhost:2000/userTransaction`, {
+                        username: this.props.username,
+                        time: `${days[a.getDay()]},${a.getDate()}/${a.getMonth()}/${a.getFullYear()} ${a.getHours()}: ${a.getMinutes()}`,
+                        moviesImage: this.state.data.image,
+                        moviesTitle: this.state.data.name,
+                        ticket_amount: this.state.count,
+                        price: this.state.price,
+                        seat: this.state.chosen,
+                        IDfilm: this.state.data.id,
+                        status: 'Unpaid'
+                    })
+                    this.setState({
+                        chosen: [],
+                        price: 0,
+                        count: 0
+                    })
+                }
+            })
+
+
         alert('Booking Succesfull')
-        this.setState({redirect:true})
+        this.setState({ redirect: true })
     }
 
     render() {
@@ -145,7 +168,7 @@ class BookingSeet extends Component {
             <div>
 
                 <div className='container full-height'>
-                    <center><img src={this.state.data.image} style={{height:300}}></img></center>
+                    <center><img src={this.state.data.image} style={{ height: 300 }}></img></center>
                     <div className='d-flex justify-content-center'>
                         <h1>Choosing Seats for {this.state.data.name}</h1>
                     </div>

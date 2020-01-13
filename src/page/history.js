@@ -48,6 +48,7 @@ class History extends Component {
             return (
                 <tr key={val.id}>
                     <td style={{ verticalAlign: 'middle' }}>{index + 1}</td>
+                    <td id={val.id} style={{ verticalAlign: 'middle'}} >{val.time}</td>
                     <td id={val.id} style={{ verticalAlign: 'middle', textAlign: "center" }} ><img src={val.moviesImage} alt='imagePoster' style={{ width: 200 }}></img></td>
                     <td id={val.id} style={{ verticalAlign: 'middle' }}>{val.moviesTitle}</td>
                     <td id={val.id} style={{ verticalAlign: 'middle' }}>Location</td>
@@ -89,6 +90,7 @@ class History extends Component {
                     <thead>
                         <tr style={{ textAlign: "center" }}>
                             <td>#</td>
+                            <td>Date</td>
                             <td >Image</td>
                             <td >Title</td>
                             <td >Location</td>

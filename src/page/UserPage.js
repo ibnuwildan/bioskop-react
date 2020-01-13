@@ -45,6 +45,7 @@ class UserPage extends Component {
             return (
                 <tr key={val.id}>
                     <td style={{ verticalAlign: 'middle' }}>{index + 1}</td>
+                    <td id={val.id} style={{ verticalAlign: 'middle' }}>{val.time}</td>
                     <td id={val.id} style={{ verticalAlign: 'middle' }}><img src={val.moviesImage} alt='imagePoster' style={{ width: 200 }}></img></td>
                     <td id={val.id} style={{ verticalAlign: 'middle' }}>{val.moviesTitle}</td>
                     <td id={val.id} style={{ verticalAlign: 'middle' }}>Location</td>
@@ -121,6 +122,7 @@ class UserPage extends Component {
                                         console.log(res.data.booked)
                                         Axios.post(`http://localhost:2000/userHistory`, {
                                             username: val.username,
+                                            time: val.time,
                                             moviesImage: val.moviesImage,
                                             moviesTitle: val.moviesTitle,
                                             ticket_amount: val.ticket_amount,
@@ -187,6 +189,7 @@ class UserPage extends Component {
                             <thead>
                                 <tr style={{ textAlign: "center" }}>
                                     <td>#</td>
+                                    <td style={{ width: 70 }}>Date</td>
                                     <td style={{ width: 70 }}>Image</td>
                                     <td style={{ width: 150 }}>Title</td>
                                     <td style={{ width: 150 }}>Location</td>
@@ -201,6 +204,7 @@ class UserPage extends Component {
                             <tbody>
                                 {this.renderDataUser()}
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

@@ -42,22 +42,27 @@ class EditProfil extends Component {
             var newpassword = this.newpass.value
             
             // if (oldpassword === this.props.password) {
-                
-                Axios.patch(`http://localhost:2000/users/${this.state.data[0].id}`, {
-                    // username: username,
-                    password: newpassword
-                    // email: email
-                })
-                
-                .then((res) => {
-                    console.log(res.data)
-                    Axios.get(`http://localhost:2000/users`)
+                if( newpassword.length>8){
+                    Axios.patch(`http://localhost:2000/users/${this.state.data[0].id}`, {
+                        // username: username,
+                        password: newpassword
+                        // email: email
+                    })
+                    
                     .then((res) => {
-                        this.setState({ data: res.data })
-                        alert( 'Successful!')
-                        
-                    })
-                    })
+                        console.log(res.data)
+                        Axios.get(`http://localhost:2000/users`)
+                        .then((res) => {
+                            this.setState({ data: res.data })
+                            alert( 'Successful!')
+                            
+                        })
+                        })    
+                    
+                }
+                else{
+                    alert('chek your new password')
+                }
                     // }
                 }
                 
